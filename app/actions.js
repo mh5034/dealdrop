@@ -136,6 +136,8 @@ export async function getPriceHistory(productId) {
         const { data, error } = await supabase.from("price_history").select("*").eq("product_id", productId).order("checked_at", { ascending: true })
 
         if (error) throw error;
+        return data || [];
+
     }
 
     catch (error) {
