@@ -1,38 +1,43 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react'
-import { Button } from './ui/button'
-import { LogIn, LogOut } from 'lucide-react'
-import { AuthModal } from './AuthModal'
-import { signOut } from '@/app/actions'
+import React, { useState } from "react";
+import { Button } from "./ui/button";
+import { LogIn, LogOut } from "lucide-react";
+import { AuthModal } from "./AuthModal";
+import { signOut } from "@/app/actions";
 
 const AuthButton = ({ user }) => {
-    const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
-    if (user) {
-        return (
-            <form action={signOut}>
-                <Button variant="ghost" size="sm" type="submit" className="gap-2">
-                    <LogOut className='w-4 h-4' />
-                    Sign Out
-                </Button>
-            </form>
-        )
-    }
-
+  if (user) {
     return (
-        <>
-            <Button variant="default" size="sm" className="bg-orange-500 hover:bg-orange-600 gap-2"
-                onClick={() => setShowAuthModal(true)}>
-                <LogIn className="w-4 h-4" />
-                Sign In
-            </Button>
+      <form action={signOut}>
+        <Button variant="ghost" size="sm" type="submit" className="gap-2">
+          <LogOut className="w-4 h-4" />
+          Sign Out
+        </Button>
+      </form>
+    );
+  }
 
-            <AuthModal isOpen={showAuthModal}
-                onClose={() => setShowAuthModal(false)} />
-        </>
+  return (
+    <>
+      <Button
+        variant="default"
+        size="sm"
+        className="bg-orange-500 hover:bg-orange-600 gap-2"
+        onClick={() => setShowAuthModal(true)}
+      >
+        <LogIn className="w-4 h-4" />
+        Sign In
+      </Button>
 
-    )
-}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
+    </>
+  );
+};
 
-export default AuthButton
+export default AuthButton;
