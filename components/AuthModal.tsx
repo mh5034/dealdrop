@@ -10,7 +10,12 @@ import {
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/client";
 
-export function AuthModal({ isOpen, onClose }) {
+interface AuthModalProps {
+  isOpen: boolean;
+  onClose: (open: boolean) => void;
+}
+
+export function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const supabase = createClient();
 
   const handleGoogleLogin = async () => {

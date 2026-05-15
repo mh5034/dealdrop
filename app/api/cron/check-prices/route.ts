@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { scrapeProduct } from "@/lib/firecrawl";
 import { sendPriceDropAlert } from "@/lib/email";
+import { Product } from "@/lib/types";
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get("authorization");
     const cronSecret = process.env.CRON_SECRET;
@@ -14,13 +15,13 @@ export async function POST(request) {
 
     // Use service role to bypass RLS
     const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
     );
 
-    const { data: products, error: productsError } = await supabase
+    const { data: products, error: productsError } = (await supabase
       .from("products")
-      .select("*");
+      .select("*")) as { data: Product[]; error: any };
 
     if (productsError) throw productsError;
 
@@ -43,8 +44,8 @@ export async function POST(request) {
           continue;
         }
 
-        const newPrice = parseFloat(productData.currentPrice);
-        const oldPrice = parseFloat(product.current_price);
+        const newPrice = productData.currentPrice;
+        const oldPrice = product.current_price;
 
         await supabase
           .from("products")
@@ -76,10 +77,10 @@ export async function POST(request) {
                 user.email,
                 product,
                 oldPrice,
-                newPrice
+                newPrice,
               );
 
-              if (emailResult.success) {
+              if (!("error" in emailResult)) {
                 results.alertsSent++;
               }
             }
@@ -100,7 +101,8 @@ export async function POST(request) {
     });
   } catch (error) {
     console.error("Cron job error:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 

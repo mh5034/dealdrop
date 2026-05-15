@@ -1,17 +1,22 @@
 import "./globals.css";
 import { Toaster } from "sonner";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Deal Drop",
   description: "",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode; 
+}) {
   return (
     <html lang="en">
       <body>
         {children}
-        <Toaster richColor />
+        <Toaster richColors />
       </body>
     </html>
   );

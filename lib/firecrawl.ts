@@ -1,8 +1,16 @@
 import Firecrawl from '@mendable/firecrawl-js';
 
+type ScrapedProduct = {
+    productName: string;
+    currentPrice: number;
+    currencyCode: string | null;
+    productImageUrl: string | null;
+
+}
+
 const firecrawl = new Firecrawl({ apiKey: process.env.FIRECRAWL_API_KEY });
 
-export async function scrapeProduct(url) {
+export async function scrapeProduct(url: string): Promise<ScrapedProduct> {
     try {
         const result = await firecrawl.scrape(url, {
             formats: [{
@@ -31,7 +39,7 @@ export async function scrapeProduct(url) {
             }],
         });
 
-        const extractedData = result.json;
+        const extractedData = result.json as ScrapedProduct;
 
         if (!extractedData || !extractedData.productName) {
             throw new Error("No data extracted from URL")
@@ -42,7 +50,7 @@ export async function scrapeProduct(url) {
 
     catch (error) {
         console.error("Firecrawl scrape error:", error)
-        throw new Error(`Failed to scrape product: ${error.message}`)
+        throw new Error(`Failed to scrape product: ${error instanceof Error? error.message: "Unknown error"}`)
     }
 
 }

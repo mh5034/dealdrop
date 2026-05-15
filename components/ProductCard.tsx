@@ -1,6 +1,6 @@
 "use client";
 import { deleteProduct } from "@/app/actions";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
 import {
@@ -13,8 +13,14 @@ import {
 import { Button } from "./ui/button";
 import Link from "next/link";
 import PriceChart from "./PriceChart";
+import { Product } from "@/lib/types";
+import { toast } from "sonner";
 
-const ProductCard = ({ product }) => {
+interface ProductCardProps {
+  product: Product;
+}
+
+const ProductCard = ({ product }: ProductCardProps) => {
   const [showChart, setShowChart] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -22,7 +28,10 @@ const ProductCard = ({ product }) => {
     if (!confirm("Remove this product from tracking?")) return;
 
     setDeleting(true);
-    await deleteProduct(product.id);
+    const result = await deleteProduct(product.id);
+
+    if (result.success) toast.success("Product removed");
+    else toast.error(result.error);
   };
 
   return (

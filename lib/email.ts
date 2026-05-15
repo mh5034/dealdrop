@@ -1,19 +1,21 @@
 import { Resend } from "resend";
+import { Product } from "@/lib/types";
+import { EmailResult } from "@/lib/types";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendPriceDropAlert(
-  userEmail,
-  product,
-  oldPrice,
-  newPrice
-) {
+  userEmail: string,
+  product: Product,
+  oldPrice: number,
+  newPrice: number,
+): Promise<EmailResult> {
   try {
     const priceDrop = oldPrice - newPrice;
     const percentageDrop = ((priceDrop / oldPrice) * 100).toFixed(1);
 
     const { data, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL,
+      from: process.env.RESEND_FROM_EMAIL as string,
       to: userEmail,
       subject: `🎉 Price Drop Alert: ${product.name}`,
       html: `
@@ -102,12 +104,14 @@ export async function sendPriceDropAlert(
 
     if (error) {
       console.error("Resend error:", error);
-      return { error };
+      return { success: false, error: error.message };
     }
 
     return { success: true, data };
   } catch (error) {
     console.error("Email error:", error);
-    return { error: error.message };
+    const message =
+      error instanceof Error ? error.message : "Failed to send email";
+    return { success: false, error: message };
   }
 }

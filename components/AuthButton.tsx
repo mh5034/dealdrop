@@ -5,8 +5,13 @@ import { Button } from "./ui/button";
 import { LogIn, LogOut } from "lucide-react";
 import { AuthModal } from "./AuthModal";
 import { signOut } from "@/app/actions";
+import { User } from "@supabase/supabase-js";
 
-const AuthButton = ({ user }) => {
+interface AuthButtonProps{
+  user: User | null;
+}
+
+const AuthButton = ({ user }: AuthButtonProps) => {
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   if (user) {

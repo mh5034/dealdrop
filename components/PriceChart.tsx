@@ -12,18 +12,28 @@ import {
 } from "recharts";
 import { getPriceHistory } from "@/app/actions";
 import { Loader2 } from "lucide-react";
+import { PriceHistory } from "@/lib/types";
 
-export default function PriceChart({ productId }) {
-  const [data, setData] = useState([]);
+interface PriceChartProps {
+  productId: string;
+}
+
+type ChartPoint = {
+  date: string;
+  price: number;
+};
+
+export default function PriceChart({ productId }: PriceChartProps) {
+  const [data, setData] = useState<ChartPoint[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
-      const history = await getPriceHistory(productId);
+      const history: PriceHistory[] = await getPriceHistory(productId);
 
-      const chartData = history.map((item) => ({
+      const chartData: ChartPoint[] = history.map((item) => ({
         date: new Date(item.checked_at).toLocaleDateString(),
-        price: parseFloat(item.price),
+        price: item.price,
       }));
 
       setData(chartData);
