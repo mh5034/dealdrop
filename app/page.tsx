@@ -6,6 +6,7 @@ import { Bell, Rabbit, Shield, TrendingDown } from "lucide-react";
 import Image from "next/image";
 import { getProducts } from "./actions";
 import { Product } from "@/lib/types";
+import DemoButton from "@/components/DemoButton";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -49,6 +50,7 @@ export default async function Home() {
               className="h-10 w-auto"
             />
           </div>
+          <DemoButton user={user} />
 
           <AuthButton user={user} />
         </div>

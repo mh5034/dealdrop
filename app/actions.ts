@@ -163,3 +163,21 @@ export async function getPriceHistory(
     return [];
   }
 }
+
+export async function demoSignIn(): Promise<void> {
+  const supabase = await createClient();
+
+  const email = process.env.DEMO_EMAIL;
+  const password = process.env.DEMO_PASSWORD;
+
+  if (!email || !password) {
+    throw new Error("Demo credentials are not configured");
+  }
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+  });
+  if (error) console.error("Demo sign-in error:", error);
+  redirect("/");
+}

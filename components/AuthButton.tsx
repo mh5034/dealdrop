@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { LogIn, LogOut } from "lucide-react";
 import { AuthModal } from "./AuthModal";
 import { signOut } from "@/app/actions";
 import { User } from "@supabase/supabase-js";
 
-interface AuthButtonProps{
+interface AuthButtonProps {
   user: User | null;
 }
 
