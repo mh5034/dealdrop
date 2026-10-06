@@ -6,27 +6,37 @@ import { LogIn, LogOut } from "lucide-react";
 import { AuthModal } from "./AuthModal";
 import { signOut } from "@/app/actions";
 import { User } from "@supabase/supabase-js";
+import { useFormStatus } from "react-dom";
 
 interface AuthButtonProps {
   user: User | null;
 }
 
 const AuthButton = ({ user }: AuthButtonProps) => {
-  const [actionLoading, setActionLoading] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+
+  function SignOutButton() {
+    const { pending } = useFormStatus();
+
+    return (
+      <Button
+        variant="ghost"
+        size="sm"
+        type="submit"
+        disabled={pending}
+        className="gap-2"
+      >
+        <LogOut className="h-4 w-4" />
+        {pending ? "Signing out..." : "Sign out"}
+      </Button>
+    );
+  }
 
   if (user) {
     return (
       <form action={signOut}>
-        <Button
-          onClick={() => setActionLoading(true)}
-          variant="ghost"
-          size="sm"
-          type="submit"
-          className="gap-2"
-        >
-          <LogOut className="w-4 h-4" />
-          {actionLoading ? "Signing out..." : "Sign out"}
+        <Button variant="ghost" size="sm" type="submit" className="gap-2">
+          <SignOutButton />
         </Button>
       </form>
     );
