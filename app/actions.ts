@@ -179,5 +179,4 @@ export async function demoSignIn(): Promise<void> {
     password: password,
   });
   if (error) console.error("Demo sign-in error:", error);
-  redirect("/");
 }

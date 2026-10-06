@@ -12,14 +12,21 @@ interface AuthButtonProps {
 }
 
 const AuthButton = ({ user }: AuthButtonProps) => {
+  const [actionLoading, setActionLoading] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   if (user) {
     return (
       <form action={signOut}>
-        <Button variant="ghost" size="sm" type="submit" className="gap-2">
+        <Button
+          onClick={() => setActionLoading(true)}
+          variant="ghost"
+          size="sm"
+          type="submit"
+          className="gap-2"
+        >
           <LogOut className="w-4 h-4" />
-          Sign Out
+          {actionLoading ? "Signing out..." : "Sign out"}
         </Button>
       </form>
     );

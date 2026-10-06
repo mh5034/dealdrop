@@ -6,7 +6,7 @@ import { Bell, Rabbit, Shield, TrendingDown } from "lucide-react";
 import Image from "next/image";
 import { getProducts } from "./actions";
 import { Product } from "@/lib/types";
-import DemoButton from "@/components/DemoButton";
+import DemoMessage from "@/components/DemoMessage";
 
 export default async function Home() {
   const supabase = await createClient();
@@ -40,7 +40,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-linear-to-br from-orange-50 via-white">
       <header className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="mx-auto px-4 py-3 flex justify-between">
           <div className="flex items-center gap-3">
             <Image
               src="/deal-drop-logo.png"
@@ -50,12 +50,10 @@ export default async function Home() {
               className="h-10 w-auto"
             />
           </div>
-          <DemoButton user={user} />
-
           <AuthButton user={user} />
         </div>
+        <DemoMessage user={user} />
       </header>
-
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-5xl font-bold text-gray-900 mb-4 tracking-tight">
